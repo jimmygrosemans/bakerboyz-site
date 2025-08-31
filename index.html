@@ -283,6 +283,13 @@
       Stuur me een update
     </button>
     <p id="updateStatus" style="margin-top:10px; font-size:14px;"></p>
+
+    <!-- Verborgen form voor POST naar Google Script -->
+    <form id="updateForm" action="https://script.google.com/macros/s/XXX/exec" method="POST" target="hidden_iframe" style="display:none;">
+      <input type="hidden" name="email" id="formEmail">
+      <input type="hidden" name="cart" id="formCart">
+    </form>
+    <iframe name="hidden_iframe" style="display:none;"></iframe>
   </div>
 </div>
 
@@ -291,7 +298,7 @@
 </footer>
 
 <script>
-const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzsDNNojZwVdC-IGcLZF_py03ZMx89P53MhM5f-JcMRgrFGdhw4k9bhHwn1jO1DQyAEWg/exec";
+const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwW5YEOTPGR69fO9mcwfZY3j_2yG5UK7pb5IbA24cFkziq9nd8XrFnEXbFjqBI0XtVA0w/exec";
 
 let cart = [];
 
@@ -374,43 +381,36 @@ function showCartPopup() {
     });
 }
 
-// Update popup sluiten
+// Sluit update-popup
 document.getElementById('closeUpdateModal').addEventListener('click', () => {
     document.getElementById('updateModal').style.display = 'none';
 });
 
-// Verstuur bestelling + email
+// Stuur e-mail via verborgen form (CORS-proof)
 document.getElementById('sendUpdate').addEventListener('click', () => {
     const email = document.getElementById('customerEmail').value.trim();
-    if (!email) {
+    if(!email) {
         document.getElementById('updateStatus').textContent = "Vul een geldig e-mailadres in.";
         return;
     }
 
-    fetch(GOOGLE_SCRIPT_URL, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email: email, cart: cart })
-    })
-    .then(response => response.json()) // JSON pars
-    .then(result => {
-        if(result.ok) {
-            document.getElementById('updateStatus').textContent = "Bedankt! Je ontvangt binnenkort een update.";
-            document.getElementById('customerEmail').value = "";
-            cart = [];
-            updateCartCount();
-        } else {
-            document.getElementById('updateStatus').textContent = "Er ging iets mis: " + result.error;
-        }
-    })
-    .catch(error => {
-        document.getElementById('updateStatus').textContent = "Er ging iets mis. Probeer opnieuw.";
-        console.error(error);
-    });
+    // Vul verborgen form in
+    document.getElementById('formEmail').value = email;
+    document.getElementById('formCart').value = JSON.stringify(cart);
+
+    // Submit form naar Apps Script
+    document.getElementById('updateForm').submit();
+
+    // Feedback aan gebruiker
+    document.getElementById('updateStatus').textContent = "Bedankt! Je ontvangt binnenkort een update.";
+    document.getElementById('customerEmail').value = "";
+    cart = [];
+    updateCartCount();
 });
 </script>
 </body>
 </html>
+
 
 
 
