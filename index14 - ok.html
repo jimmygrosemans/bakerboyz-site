@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Baker Boyz - Retro</title>
+<style>
+    * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Arial', sans-serif; }
+    body {
+        background: linear-gradient(135deg, #000000, #1a1a1a);
+        color: #FFD700;
+        text-align: center;
+    }
+
+    header {
+        background: #000;
+        padding: 15px 30px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border-bottom: 2px solid #FFD700;
+    }
+
+    header h1 {
+        font-size: 2rem;
+        font-weight: bold;
+        color: #FFD700;
+    }
+
+    nav ul {
+        list-style: none;
+        display: flex;
+        gap: 25px;
+    }
+
+    nav ul li a {
+        color: #FFD700;
+        text-decoration: none;
+        font-weight: bold;
+        font-size: 1rem;
+    }
+
+    /* Hero Section */
+    .hero {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        grid-template-rows: repeat(3, 250px);
+        gap: 10px;
+        padding: 20px;
+        background: radial-gradient(circle, #3a3a3a, #1a1a1a);
+    }
+
+    .hero-item {
+        position: relative;
+        overflow: hidden;
+        border-radius: 12px;
+        background-color: #333;
+        cursor: pointer;
+    }
+
+    .hero img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+    }
+
+    .overlay {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        background: rgba(0, 0, 0, 0.6);
+        color: #FFD700;
+        padding: 8px;
+        font-size: 1rem;
+        text-transform: uppercase;
+        text-align: center;
+    }
+
+    /* Menu Sectie */
+    .menu {
+        padding: 50px 20px;
+        background: #111;
+    }
+
+    .menu h2 {
+        font-size: 2rem;
+        margin-bottom: 30px;
+        color: #FFD700;
+    }
+
+    .menu-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 25px;
+        max-width: 1200px;
+        margin: 0 auto;
+    }
+
+    .menu-item {
+        background: #222;
+        padding: 15px;
+        border: 1px solid #FFD700;
+        border-radius: 10px;
+    }
+
+    .menu-item h3 {
+        font-size: 1.2rem;
+        margin-bottom: 8px;
+    }
+
+    .menu-item p {
+        font-size: 1rem;
+        margin-bottom: 10px;
+    }
+
+    .menu-item .btn-order {
+        font-size: 1rem;
+        padding: 10px 20px;
+    }
+
+    /* Modal styling */
+    .modal {
+        display: none;
+        position: fixed;
+        z-index: 9999;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.8);
+        justify-content: center;
+        align-items: center;
+    }
+
+    .modal-content {
+        background: #1a1a1a;
+        border: 2px solid #FFD700;
+        border-radius: 12px;
+        padding: 20px;
+        max-width: 400px;
+        width: 90%;
+        text-align: center;
+        color: #FFD700;
+        position: relative;
+    }
+
+    .modal-content img {
+        width: 100%;
+        border-radius: 10px;
+        margin-bottom: 15px;
+    }
+
+    .modal-content h3 {
+        font-size: 1.5rem;
+        margin-bottom: 10px;
+    }
+
+    .modal-content p {
+        font-size: 1.2rem;
+        margin-bottom: 15px;
+    }
+
+    .close-btn {
+        position: absolute;
+        top: 10px;
+        right: 15px;
+        font-size: 1.8rem;
+        font-weight: bold;
+        color: #FFD700;
+        cursor: pointer;
+    }
+
+    .btn-order {
+        padding: 12px 28px;
+        background: #FFD700;
+        color: #000;
+        font-weight: bold;
+        font-size: 1rem;
+        text-decoration: none;
+        border-radius: 8px;
+        box-shadow: 0 5px 15px rgba(255,215,0,0.4);
+        display: inline-block;
+    }
+
+    footer {
+        background: #000;
+        color: #FFD700;
+        padding: 15px;
+        font-size: 0.9rem;
+    }
+</style>
+</head>
+<body>
+
+<header>
+    <h1>Baker Boyz</h1>
+    <p class="tagline">Lactosevrij – 100% natuurlijk – Ambachtelijk geproduceerd</p>
+    <nav>
+        <a href="#" id="cartButton" style="color:#FFD700; font-weight:bold; margin-left:20px;">🛒 Winkelmandje (<span id="cartCount">0</span>)</a>
+        <ul>
+            <li><a href="#">Home</a></li>
+            <li><a href="#menu">Menu</a></li>
+            <li><a href="#">Contact</a></li>
+        </ul>
+    </nav>
+</header>
+
+<!-- HERO GRID -->
+<section class="hero">
+    <div class="hero-item" data-name="Biscotti" data-price="250g - €6,50" data-image="images/biscotti.jpg">
+        <img src="images/biscotti.jpg" alt="Biscotti"><div class="overlay">Biscotti</div>
+    </div>
+    <div class="hero-item" data-name="Panettone" data-price="750g - €24,50" data-image="images/panettone.jpg">
+        <img src="images/panettone.jpg" alt="Panettone"><div class="overlay">Panettone</div>
+    </div>
+    <div class="hero-item" data-name="Amaretti" data-price="250g - €7,50" data-image="images/amaretti.jpg">
+        <img src="images/amaretti.jpg" alt="Amaretti"><div class="overlay">Amaretti</div>
+    </div>
+    <div class="hero-item" data-name="Anise Cookie" data-price="250g - €7,50" data-image="images/anise-cookie.jpg">
+        <img src="images/anise-cookie.jpg" alt="Anise Cookie"><div class="overlay">Anise Cookie</div>
+    </div>
+    <div class="hero-item"><img src="images/BakerBoyz-Retro.png" alt="Baker Boyz Logo"></div>
+    <div class="hero-item" data-name="Cannoli" data-price="150g - €6,50" data-image="images/cannoli.jpg">
+        <img src="images/cannoli.jpg" alt="Cannoli"><div class="overlay">Cannoli</div>
+    </div>
+    <div class="hero-item" data-name="Almond Cookie" data-price="250g - €7,50" data-image="images/almond-cookie.jpg">
+        <img src="images/almond-cookie.jpg" alt="Almond Cookie"><div class="overlay">Almond Cookie</div>
+    </div>
+    <div class="hero-item" data-name="Croissant" data-price="stuk - €1,75" data-image="images/croissant.jpg">
+        <img src="images/croissant.jpg" alt="Croissant"><div class="overlay">Croissant</div>
+    </div>
+    <div class="hero-item" data-name="Ricciarelli" data-price="175g - €6,50" data-image="images/ricciarelli.jpg">
+        <img src="images/ricciarelli.jpg" alt="Ricciarelli"><div class="overlay">Ricciarelli</div>
+    </div>
+</section>
+
+<!-- MENU -->
+<section class="menu" id="menu">
+    <h2>Our favorites</h2>
+    <div class="menu-grid">
+        <div class="menu-item">
+            <h3>Biscotti</h3>
+            <p>250g - €7,50</p>
+            <a href="#" class="btn-order">Bestel</a>
+        </div>
+        <div class="menu-item">
+            <h3>Panettone</h3>
+            <p>750g - €24,50</p>
+            <a href="#" class="btn-order">Bestel</a>
+        </div>
+        <div class="menu-item">
+            <h3>Anise Cookie</h3>
+            <p>250g - €14,50</p>
+            <a href="#" class="btn-order">Bestel</a>
+        </div>
+    </div>
+</section>
+
+<!-- PRODUCT MODAL -->
+<div class="modal" id="productModal">
+    <div class="modal-content">
+        <span class="close-btn" id="closeProductModal">&times;</span>
+        <img id="modalImage" src="" alt="">
+        <h3 id="modalName"></h3>
+        <p id="modalPrice"></p>
+        <a href="#" class="btn-order" id="addToCart">Bestel</a>
+    </div>
+</div>
+
+<!-- UPDATE POPUP -->
+<div class="modal" id="updateModal">
+  <div class="modal-content">
+    <span class="close-btn" id="closeUpdateModal">&times;</span>
+    <h3>We zijn bijna klaar!</h3>
+    <p>
+      We zitten momenteel in onze start-upfase. Bij de officiële opening brengen we je graag op de hoogte.<br>
+      Laat hieronder je e-mailadres achter zodat je als eerste een update en 10% korting ontvangt!
+    </p>
+    <input type="email" id="customerEmail" placeholder="E-mailadres" style="width:90%; padding:10px; margin:10px 0;">
+    <button id="sendUpdate" style="padding:12px 20px; background:#FFD700; color:#000; font-weight:bold; border:none; border-radius:8px;">
+      Stuur me een update
+    </button>
+    <p id="updateStatus" style="margin-top:10px; font-size:14px;"></p>
+  </div>
+</div>
+
+<footer>
+    &copy; 2025 Baker Boyz - Retro Vibes Only
+</footer>
+
+<script>
+const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxkcpN-firhedwMeAephcciNegmeI7jSK4uqxzvo3IDUCGUOc1nHTMYplNnOXUh4Hje4A/exec";
+
+let cart = [];
+
+// Modal referenties
+const productModal = document.getElementById('productModal');
+const modalImage = document.getElementById('modalImage');
+const modalName = document.getElementById('modalName');
+const modalPrice = document.getElementById('modalPrice');
+const addToCartBtn = document.getElementById('addToCart');
+
+// Klik op hero item → toon modal
+document.querySelectorAll('.hero-item').forEach(item => {
+    item.addEventListener('click', () => {
+        const name = item.dataset.name;
+        const price = item.dataset.price;
+        const image = item.dataset.image;
+
+        if (name && price && image) {
+            modalImage.src = image;
+            modalName.textContent = name;
+            modalPrice.textContent = price;
+            productModal.style.display = 'flex';
+        }
+    });
+});
+
+// Sluit modal
+document.getElementById('closeProductModal').addEventListener('click', () => productModal.style.display = 'none');
+window.addEventListener('click', (e) => {
+    if (e.target === productModal) productModal.style.display = 'none';
+});
+
+// Voeg toe aan winkelmandje (vanuit modal)
+addToCartBtn.addEventListener('click', (e) => {
+    e.preventDefault();
+    cart.push({ name: modalName.textContent, price: modalPrice.textContent });
+    updateCartCount();
+    productModal.style.display = 'none';
+});
+
+// Voeg toe vanuit menu
+document.querySelectorAll('.menu-item .btn-order').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+        e.preventDefault();
+        const parent = btn.closest('.menu-item');
+        const name = parent.querySelector('h3').textContent;
+        const price = parent.querySelector('p').textContent;
+        cart.push({ name, price });
+        updateCartCount();
+    });
+});
+
+function updateCartCount() {
+    document.getElementById('cartCount').textContent = cart.length;
+}
+
+// Winkelmand tonen
+document.getElementById('cartButton').addEventListener('click', (e) => {
+    e.preventDefault();
+    showCartPopup();
+});
+
+function showCartPopup() {
+    let html = "<h3>Je winkelmandje</h3><ul style='text-align:left;'>";
+    cart.forEach(item => {
+        html += `<li>${item.name} - ${item.price}</li>`;
+    });
+    html += "</ul><button id='orderNow' style='margin-top:15px; padding:12px 20px; background:#FFD700; color:#000; font-weight:bold; border:none; border-radius:8px;'>Bestel nu</button>";
+
+    const div = document.createElement('div');
+    div.className = 'modal';
+    div.style.display = 'flex';
+    div.innerHTML = `<div class="modal-content"><span class="close-btn">&times;</span>${html}</div>`;
+    document.body.appendChild(div);
+
+    div.querySelector('.close-btn').addEventListener('click', () => div.remove());
+    div.querySelector('#orderNow').addEventListener('click', () => {
+        div.remove();
+        document.getElementById('updateModal').style.display = 'flex';
+    });
+}
+
+// Update popup sluiten
+document.getElementById('closeUpdateModal').addEventListener('click', () => {
+    document.getElementById('updateModal').style.display = 'none';
+});
+
+// Verstuur bestelling + email
+document.getElementById('sendUpdate').addEventListener('click', () => {
+    const email = document.getElementById('customerEmail').value.trim();
+    if (!email) {
+        document.getElementById('updateStatus').textContent = "Vul een geldig e-mailadres in.";
+        return;
+    }
+
+    fetch(GOOGLE_SCRIPT_URL, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email: email, cart: cart })
+    })
+    .then(response => response.text())
+    .then(result => {
+        document.getElementById('updateStatus').textContent = "Bedankt! Je ontvangt binnenkort een update.";
+        document.getElementById('customerEmail').value = "";
+        cart = [];
+        updateCartCount();
+    })
+    .catch(error => {
+        document.getElementById('updateStatus').textContent = "Er ging iets mis. Probeer opnieuw.";
+        console.error(error);
+    });
+});
+</script>
+</body>
+</html>
