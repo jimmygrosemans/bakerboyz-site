@@ -403,7 +403,7 @@ document.getElementById('sendUpdate').addEventListener('click', () => {
     }
 
     // ✅ Werk bestaande bestelling bij met e-mail
-    logOrder({ email: email, update: "JA" });
+   logEmailUpdate(email);
 
     // Feedback aan gebruiker
     document.getElementById('updateStatus').textContent = "Bedankt! Je ontvangt binnenkort een update.";
@@ -425,9 +425,20 @@ function logOrder({ email, update }) {
         .then(() => console.log("Bestelling gelogd:", { email, cart }))
         .catch(err => console.error("Fout bij loggen:", err));
 }
+   function logEmailUpdate(email) {
+    const formData = new FormData();
+    formData.append("orderId", orderId);
+    formData.append("email", email);
+    formData.append("update", "JA");
+
+    fetch(GOOGLE_SCRIPT_URL, { method: "POST", body: formData })
+        .then(() => console.log("Email update gelogd:", email))
+        .catch(err => console.error("Fout bij loggen email:", err));
+}
 </script>
 </body>
 </html>
+
 
 
 
