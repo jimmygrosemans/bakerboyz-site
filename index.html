@@ -3,299 +3,418 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Baker Boyz</title>
+<title>Baker Boyz - Retro</title>
 <style>
-/* ✅ Basisstijl */
-body {
-    margin: 0;
-    font-family: Arial, sans-serif;
-    background: #111;
-    color: #fff;
-}
+    * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Arial', sans-serif; }
+    body {
+        background: linear-gradient(135deg, #000000, #1a1a1a);
+        color: #FFD700;
+        text-align: center;
+    }
 
-/* ✅ Navigatie */
-nav {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 15px 20px;
-    background: #000;
-    position: sticky;
-    top: 0;
-    z-index: 1000;
-}
-
-nav a {
-    color: #FFD700;
-    text-decoration: none;
-    font-size: 1rem;
-    margin-right: 15px;
-}
-
-nav ul {
-    display: flex;
-    gap: 20px;
-}
-
-.menu-toggle {
-    display: none;
-    font-size: 2rem;
-    color: #FFD700;
-    cursor: pointer;
-}
-
-@media (max-width: 768px) {
-    nav ul {
-        display: none;
-        flex-direction: column;
+    header {
         background: #000;
-        position: absolute;
-        top: 60px;
-        right: 0;
-        width: 200px;
-        padding: 10px;
-        border: 1px solid #FFD700;
-    }
-    nav ul.show {
+        padding: 15px 30px;
         display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border-bottom: 2px solid #FFD700;
     }
-    .menu-toggle {
-        display: block;
-    }
-}
 
-/* ✅ Hero grid */
-.hero {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    grid-template-rows: repeat(3, 250px);
-    gap: 10px;
-    padding: 20px;
-}
-.hero img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    cursor: pointer;
-}
-@media (max-width: 768px) {
-    .hero {
-        grid-template-columns: repeat(2, 1fr);
-        grid-template-rows: auto;
+    header h1 {
+        font-size: 2rem;
+        font-weight: bold;
+        color: #FFD700;
     }
-}
-@media (max-width: 480px) {
-    .hero {
-        grid-template-columns: 1fr;
+
+    nav ul {
+        list-style: none;
+        display: flex;
+        gap: 25px;
     }
-}
 
-/* ✅ Modals */
-.modal {
-    display: none;
-    position: fixed;
-    top: 0; left: 0;
-    width: 100%; height: 100%;
-    background: rgba(0,0,0,0.8);
-    justify-content: center;
-    align-items: center;
-    overflow-y: auto;
-}
-.modal-content {
-    background: #222;
-    padding: 20px;
-    border-radius: 8px;
-    max-width: 400px;
-    width: 90%;
-    text-align: center;
-}
-.modal img {
-    width: 100%;
-    height: auto;
-    border-radius: 8px;
-}
-.close {
-    position: absolute;
-    top: 20px; right: 20px;
-    font-size: 2rem;
-    color: #FFD700;
-    cursor: pointer;
-}
-
-/* ✅ Knoppen */
-.btn-order {
-    display: inline-block;
-    background: #FFD700;
-    color: #000;
-    padding: 14px 30px;
-    font-size: 1.2rem;
-    margin-top: 15px;
-    cursor: pointer;
-    border-radius: 5px;
-}
-@media (max-width: 480px) {
-    .btn-order {
-        width: 100%;
+    nav ul li a {
+        color: #FFD700;
+        text-decoration: none;
+        font-weight: bold;
         font-size: 1rem;
     }
-}
+
+    /* Hero Section */
+    .hero {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        grid-template-rows: repeat(3, 250px);
+        gap: 10px;
+        padding: 20px;
+        background: radial-gradient(circle, #3a3a3a, #1a1a1a);
+    }
+
+    .hero-item {
+        position: relative;
+        overflow: hidden;
+        border-radius: 12px;
+        background-color: #333;
+        cursor: pointer;
+    }
+
+    .hero img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+    }
+
+    .overlay {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        background: rgba(0, 0, 0, 0.6);
+        color: #FFD700;
+        padding: 8px;
+        font-size: 1rem;
+        text-transform: uppercase;
+        text-align: center;
+    }
+
+    /* Menu Sectie */
+    .menu {
+        padding: 50px 20px;
+        background: #111;
+    }
+
+    .menu h2 {
+        font-size: 2rem;
+        margin-bottom: 30px;
+        color: #FFD700;
+    }
+
+    .menu-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 25px;
+        max-width: 1200px;
+        margin: 0 auto;
+    }
+
+    .menu-item {
+        background: #222;
+        padding: 15px;
+        border: 1px solid #FFD700;
+        border-radius: 10px;
+    }
+
+    .menu-item h3 {
+        font-size: 1.2rem;
+        margin-bottom: 8px;
+    }
+
+    .menu-item p {
+        font-size: 1rem;
+        margin-bottom: 10px;
+    }
+
+    .menu-item .btn-order {
+        font-size: 1rem;
+        padding: 10px 20px;
+    }
+
+    /* Modal styling */
+    .modal {
+        display: none;
+        position: fixed;
+        z-index: 9999;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.8);
+        justify-content: center;
+        align-items: center;
+    }
+
+    .modal-content {
+        background: #1a1a1a;
+        border: 2px solid #FFD700;
+        border-radius: 12px;
+        padding: 20px;
+        max-width: 400px;
+        width: 90%;
+        text-align: center;
+        color: #FFD700;
+        position: relative;
+    }
+
+    .modal-content img {
+        width: 100%;
+        border-radius: 10px;
+        margin-bottom: 15px;
+    }
+
+    .modal-content h3 {
+        font-size: 1.5rem;
+        margin-bottom: 10px;
+    }
+
+    .modal-content p {
+        font-size: 1.2rem;
+        margin-bottom: 15px;
+    }
+
+    .close-btn {
+        position: absolute;
+        top: 10px;
+        right: 15px;
+        font-size: 1.8rem;
+        font-weight: bold;
+        color: #FFD700;
+        cursor: pointer;
+    }
+
+    .btn-order {
+        padding: 12px 28px;
+        background: #FFD700;
+        color: #000;
+        font-weight: bold;
+        font-size: 1rem;
+        text-decoration: none;
+        border-radius: 8px;
+        box-shadow: 0 5px 15px rgba(255,215,0,0.4);
+        display: inline-block;
+    }
+
+    footer {
+        background: #000;
+        color: #FFD700;
+        padding: 15px;
+        font-size: 0.9rem;
+    }
 </style>
 </head>
 <body>
 
-<!-- ✅ Navigatie -->
-<nav>
-    <a href="#">Baker Boyz</a>
-    <ul>
-        <li><a href="#">Home</a></li>
-        <li><a href="#menu">Menu</a></li>
-        <li><a href="#">Contact</a></li>
-    </ul>
-    <span class="menu-toggle">☰</span>
-    <a href="#" id="cartButton">🛒 Winkelmand (<span id="cartCount">0</span>)</a>
-</nav>
+<header>
+    <h1>Baker Boyz</h1>
+    <p class="tagline">Lactosevrij – 100% natuurlijk – Ambachtelijk geproduceerd</p>
+    <nav>
+        <a href="#" id="cartButton" style="color:#FFD700; font-weight:bold; margin-left:20px;">🛒 Winkelmandje (<span id="cartCount">0</span>)</a>
+        <ul>
+            <li><a href="#">Home</a></li>
+            <li><a href="#menu">Menu</a></li>
+            <li><a href="#">Contact</a></li>
+        </ul>
+    </nav>
+</header>
 
-<!-- ✅ Hero Grid -->
+<!-- HERO GRID -->
 <section class="hero">
-    <img src="biscotti.jpg" alt="Biscotti" class="product-img" data-name="Biscotti" data-price="250g - €6,50">
-    <img src="panettone.jpg" alt="Panettone" class="product-img" data-name="Panettone" data-price="750g - €24,50">
-    <img src="amaretti.jpg" alt="Amaretti" class="product-img" data-name="Amaretti" data-price="250g - €7,50">
-     <img src="anise-cookie.jpg" alt="Anise cookie" class="product-img" data-name="Anise cookie" data-price="250g - €7,50">
-     <img src="BakerBoyz-Retro.png" alt="Baker Boyz Logo">
-     <img src="Cannoli.jpg" alt="Cannoli" class="product-img" data-name="Cannoli" data-price="150g - €6,50">
-     <img src="almond-cookie.jpg" alt="Almond Cookie" class="product-img" data-name="Almond Cookie" data-price="250g - €7,50">
-   <img src="croissant.jpg" alt="Croissant" class="product-img" data-name="Croissant" data-price="stuk - €1,75">
-   <img src="ricciarelli.jpg" alt="Ricciarelli" class="product-img" data-name="Ricciarelli" data-price="175g - €6,50">
+    <div class="hero-item" data-name="Biscotti" data-price="250g - €6,50" data-image="biscotti.jpg">
+        <img src="biscotti.jpg" alt="Biscotti"><div class="overlay">Biscotti</div>
+    </div>
+    <div class="hero-item" data-name="Panettone" data-price="750g - €24,50" data-image="panettone.jpg">
+        <img src="panettone.jpg" alt="Panettone"><div class="overlay">Panettone</div>
+    </div>
+    <div class="hero-item" data-name="Amaretti" data-price="250g - €7,50" data-image="amaretti.jpg">
+        <img src="amaretti.jpg" alt="Amaretti"><div class="overlay">Amaretti</div>
+    </div>
+    <div class="hero-item" data-name="Anise Cookie" data-price="250g - €7,50" data-image="anise-cookie.jpg">
+        <img src="anise-cookie.jpg" alt="Anise Cookie"><div class="overlay">Anise Cookie</div>
+    </div>
+    <div class="hero-item"><img src="BakerBoyz-Retro.png" alt="Baker Boyz Logo"></div>
+    <div class="hero-item" data-name="Cannoli" data-price="150g - €6,50" data-image="cannoli.jpg">
+        <img src="cannoli.jpg" alt="Cannoli"><div class="overlay">Cannoli</div>
+    </div>
+    <div class="hero-item" data-name="Almond Cookie" data-price="250g - €7,50" data-image="almond-cookie.jpg">
+        <img src="almond-cookie.jpg" alt="Almond Cookie"><div class="overlay">Almond Cookie</div>
+    </div>
+    <div class="hero-item" data-name="Croissant" data-price="stuk - €1,75" data-image="croissant.jpg">
+        <img src="croissant.jpg" alt="Croissant"><div class="overlay">Croissant</div>
+    </div>
+    <div class="hero-item" data-name="Ricciarelli" data-price="175g - €6,50" data-image="ricciarelli.jpg">
+        <img src="ricciarelli.jpg" alt="Ricciarelli"><div class="overlay">Ricciarelli</div>
+    </div>
 </section>
 
-<!-- ✅ Product Modal -->
+<!-- MENU -->
+<section class="menu" id="menu">
+    <h2>Our favorites</h2>
+    <div class="menu-grid">
+        <div class="menu-item">
+            <h3>Biscotti</h3>
+            <p>250g - €7,50</p>
+            <a href="#" class="btn-order">Bestel</a>
+        </div>
+        <div class="menu-item">
+            <h3>Panettone</h3>
+            <p>750g - €24,50</p>
+            <a href="#" class="btn-order">Bestel</a>
+        </div>
+        <div class="menu-item">
+            <h3>Anise Cookie</h3>
+            <p>250g - €14,50</p>
+            <a href="#" class="btn-order">Bestel</a>
+        </div>
+    </div>
+</section>
+
+<!-- PRODUCT MODAL -->
 <div class="modal" id="productModal">
-    <span class="close">&times;</span>
     <div class="modal-content">
-        <img id="modalImg" src="" alt="">
-        <h2 id="modalName"></h2>
+        <span class="close-btn" id="closeProductModal">&times;</span>
+        <img id="modalImage" src="" alt="">
+        <h3 id="modalName"></h3>
         <p id="modalPrice"></p>
-        <button class="btn-order" id="modalOrderBtn">Bestel</button>
+        <a href="#" class="btn-order" id="addToCart">Bestel</a>
     </div>
 </div>
 
-<!-- ✅ Winkelmandje Modal -->
-<div class="modal" id="cartModal">
-    <span class="close">&times;</span>
-    <div class="modal-content">
-        <h2>Winkelmand</h2>
-        <ul id="cartItems"></ul>
-        <button class="btn-order" id="orderNow">Bestel nu</button>
-    </div>
-</div>
-
-<!-- ✅ Email Update Modal -->
+<!-- UPDATE POPUP -->
 <div class="modal" id="updateModal">
-    <span class="close">&times;</span>
-    <div class="modal-content">
-        <h2>Ontvang een update</h2>
-        <input type="email" id="emailInput" placeholder="Jouw e-mail">
-        <button class="btn-order" id="sendUpdate">Stuur me een update</button>
-        <p id="updateMessage" style="color:lime;"></p>
-    </div>
+  <div class="modal-content">
+    <span class="close-btn" id="closeUpdateModal">&times;</span>
+    <h3>We zijn bijna klaar!</h3>
+    <p>
+      We zitten momenteel in onze start-upfase. Bij de officiële opening brengen we je graag op de hoogte.<br>
+      Laat hieronder je e-mailadres achter zodat je als eerste een update en 10% korting ontvangt!
+    </p>
+    <input type="email" id="customerEmail" placeholder="E-mailadres" style="width:90%; padding:10px; margin:10px 0;">
+    <button id="sendUpdate" style="padding:12px 20px; background:#FFD700; color:#000; font-weight:bold; border:none; border-radius:8px;">
+      Stuur me een update
+    </button>
+    <p id="updateStatus" style="margin-top:10px; font-size:14px;"></p>
+
+    <!-- Verborgen form voor POST naar Google Script -->
+    <form id="updateForm" action="https://script.google.com/macros/s/AKfycbz-vP8WPrlzz1B1gAp48FewhVughpWBDgE5XfUFtmzQkKfYCIcZBr4dJc-HKngK0Od39A/exec" method="POST" target="hidden_iframe" style="display:none;">
+      <input type="hidden" name="email" id="formEmail">
+      <input type="hidden" name="cart" id="formCart">
+    </form>
+    <iframe name="hidden_iframe" style="display:none;"></iframe>
+  </div>
 </div>
+
+<footer>
+    &copy; 2025 Baker Boyz - Retro Vibes Only
+</footer>
 
 <script>
-const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzuANCTx5cK5AJD0f5LXRdTNkzzZ-0dkGeyp60WYK_czpIAoTB6tcAww91qpfSl6ZHS/exec"; // Vervang door jouw Apps Script URL
+const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbz-vP8WPrlzz1B1gAp48FewhVughpWBDgE5XfUFtmzQkKfYCIcZBr4dJc-HKngK0Od39A/exec";
+let orderId = Date.now().toString();
 let cart = [];
-let currentProduct = null;
 
-/* ✅ Menu toggle */
-document.querySelector('.menu-toggle').addEventListener('click', () => {
-    document.querySelector('nav ul').classList.toggle('show');
-});
+// ✅ Product toevoegen
+function addToCart(name, price) {
+    cart.push({ name, price });
+    document.getElementById('cartCount').textContent = cart.length;
+}
 
-/* ✅ Product modal open */
-document.querySelectorAll('.product-img').forEach(img => {
-    img.addEventListener('click', () => {
-        currentProduct = { name: img.dataset.name, price: img.dataset.price };
-        document.getElementById('modalImg').src = img.src;
-        document.getElementById('modalName').textContent = currentProduct.name;
-        document.getElementById('modalPrice').textContent = `Prijs: €${currentProduct.price}`;
+// ✅ Log één product
+function logOrderSingleProduct(name, price) {
+    const formData = new FormData();
+    formData.append("orderId", orderId);
+    formData.append("email", "");
+    formData.append("cart", JSON.stringify([{ name, price }]));
+    formData.append("update", "NEE");
+    formData.append("timestamp", new Date().toISOString());
+
+    fetch(GOOGLE_SCRIPT_URL, { method: "POST", body: formData })
+        .then(() => console.log("✅ Gelogd:", name))
+        .catch(err => console.error("❌ Log fout:", err));
+}
+
+// ✅ Log alleen email
+function logEmailUpdate(email) {
+    const formData = new FormData();
+    formData.append("orderId", orderId);
+    formData.append("email", email);
+    formData.append("update", "JA");
+    formData.append("timestamp", new Date().toISOString());
+
+    fetch(GOOGLE_SCRIPT_URL, { method: "POST", body: formData })
+        .then(() => console.log("✅ Email gelogd:", email))
+        .catch(err => console.error("❌ Email log fout:", err));
+}
+
+// ✅ Modal openen bij klik op hero-item
+document.querySelectorAll('.hero-item').forEach(item => {
+    item.addEventListener('click', () => {
+        const name = item.getAttribute('data-name');
+        const price = item.getAttribute('data-price');
+        const image = item.getAttribute('data-image');
+
+        if (!name || !price) return; // Voor lege grid-item (logo)
+
+        document.getElementById('modalName').textContent = name;
+        document.getElementById('modalPrice').textContent = price;
+        document.getElementById('modalImage').src = image;
+
         document.getElementById('productModal').style.display = 'flex';
     });
 });
 
-/* ✅ Sluit modals */
-document.querySelectorAll('.close').forEach(btn => {
-    btn.addEventListener('click', () => btn.closest('.modal').style.display = 'none');
-});
-window.addEventListener('click', e => {
-    if (e.target.classList.contains('modal')) e.target.style.display = 'none';
+// ✅ Sluitknop modal
+document.getElementById('closeProductModal').addEventListener('click', () => {
+    document.getElementById('productModal').style.display = 'none';
 });
 
-/* ✅ Bestel knop in modal */
-document.getElementById('modalOrderBtn').addEventListener('click', () => {
-    if (currentProduct) {
-        cart.push(currentProduct);
-        updateCart();
-        logOrder(currentProduct); // Log direct bij product-bestel
-        document.getElementById('productModal').style.display = 'none';
-    }
+// ✅ Klik buiten modal sluit ook
+window.addEventListener('click', (e) => {
+    const modal = document.getElementById('productModal');
+    if (e.target === modal) modal.style.display = 'none';
 });
 
-/* ✅ Winkelmand openen */
-document.getElementById('cartButton').addEventListener('click', () => {
-    document.getElementById('cartModal').style.display = 'flex';
+// ✅ Bestel-knop in modal
+document.getElementById('addToCart').addEventListener('click', (e) => {
+    e.preventDefault();
+    const name = document.getElementById('modalName').textContent;
+    const price = document.getElementById('modalPrice').textContent;
+
+    addToCart(name, price);
+    logOrderSingleProduct(name, price);
+
+    document.getElementById('productModal').style.display = 'none';
 });
 
-/* ✅ Winkelmandje lijst updaten */
-function updateCart() {
-    document.getElementById('cartCount').textContent = cart.length;
-    document.getElementById('cartItems').innerHTML = cart.map(item => `<li>${item.name} - €${item.price}</li>`).join('');
-}
+// ✅ Bestel-knoppen in menu
+document.querySelectorAll('.menu-item .btn-order').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+        e.preventDefault();
+        const parent = btn.closest('.menu-item');
+        const name = parent.querySelector('h3').textContent;
+        const price = parent.querySelector('p').textContent;
 
-/* ✅ Bestel nu → open update modal */
-document.getElementById('orderNow').addEventListener('click', () => {
-    document.getElementById('cartModal').style.display = 'none';
+        addToCart(name, price);
+        logOrderSingleProduct(name, price);
+    });
+});
+
+// ✅ Klik op winkelmandje opent update-modal
+document.getElementById('cartButton').addEventListener('click', (e) => {
+    e.preventDefault();
     document.getElementById('updateModal').style.display = 'flex';
 });
 
-/* ✅ Email update verzenden */
-document.getElementById('sendUpdate').addEventListener('click', () => {
-    const email = document.getElementById('emailInput').value;
-    if (email) {
-        logEmailUpdate(email);
-        document.getElementById('updateMessage').textContent = "Bedankt! Je ontvangt binnenkort een update.";
-    }
+// ✅ Sluit update modal
+document.getElementById('closeUpdateModal').addEventListener('click', () => {
+    document.getElementById('updateModal').style.display = 'none';
 });
 
-/* ✅ Logging functies */
-function logOrder(product) {
-    const formData = new FormData();
-    formData.append("email", "");
-    formData.append("cart", JSON.stringify([product]));
-    fetch(GOOGLE_SCRIPT_URL, { method: "POST", body: formData });
-}
+// ✅ Klik buiten update-modal sluit ook
+window.addEventListener('click', (e) => {
+    const modal = document.getElementById('updateModal');
+    if (e.target === modal) modal.style.display = 'none';
+});
 
-function logEmailUpdate(email) {
-    const formData = new FormData();
-    formData.append("email", email);
-    formData.append("cart", JSON.stringify([]));
-    fetch(GOOGLE_SCRIPT_URL, { method: "POST", body: formData });
-}
+// ✅ Email update verzenden
+document.getElementById('sendUpdate').addEventListener('click', () => {
+    const email = document.getElementById('customerEmail').value.trim();
+    if (email) {
+        logEmailUpdate(email);
+        document.getElementById('updateStatus').textContent = "Bedankt! Je ontvangt binnenkort een update.";
+        document.getElementById('customerEmail').value = "";
+    }
+});
 </script>
 
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
