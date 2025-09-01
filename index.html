@@ -285,7 +285,7 @@
     <p id="updateStatus" style="margin-top:10px; font-size:14px;"></p>
 
     <!-- Verborgen form voor POST naar Google Script -->
-    <form id="updateForm" action="https://script.google.com/macros/s/AKfycbx6D7oOgE_mkytOTAeGIP99xIAc5m41JEML7hX-IkcMgYFuH-zOoeNRPK1ygdAAs__Cuw/exec" method="POST" target="hidden_iframe" style="display:none;">
+    <form id="updateForm" action="https://script.google.com/macros/s/AKfycbwJsSyH0U9NGFRDQ802Sd2q8FEwhcHb-gfificHUdegBhZ89DDzKYEmdUQHAFMJQtYtoQ/exec" method="POST" target="hidden_iframe" style="display:none;">
       <input type="hidden" name="email" id="formEmail">
       <input type="hidden" name="cart" id="formCart">
     </form>
@@ -298,7 +298,7 @@
 </footer>
 
 <script>
-const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbx6D7oOgE_mkytOTAeGIP99xIAc5m41JEML7hX-IkcMgYFuH-zOoeNRPK1ygdAAs__Cuw/exec";
+const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwJsSyH0U9NGFRDQ802Sd2q8FEwhcHb-gfificHUdegBhZ89DDzKYEmdUQHAFMJQtYtoQ/exec";
 
 let cart = [];
 let orderId = Date.now(); // Uniek ID voor deze bestelling
@@ -428,6 +428,7 @@ function logOrder({ email, update }) {
 </script>
 </body>
 </html>
+
 
 
 
