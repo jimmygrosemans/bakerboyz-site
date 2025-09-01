@@ -285,7 +285,7 @@
     <p id="updateStatus" style="margin-top:10px; font-size:14px;"></p>
 
     <!-- Verborgen form voor POST naar Google Script -->
-    <form id="updateForm" action="https://script.google.com/macros/s/AKfycbxbPTVtBYemEoYXqp2Xc-2khnaBhHk7grtNxy3f18R_FYacugwT2smw8T8mVJhhkbgOpg/exec" method="POST" target="hidden_iframe" style="display:none;">
+    <form id="updateForm" action="https://script.google.com/macros/s/AKfycbxDDYgwS08N-mLp2g5YJG2VWAMeN5SNtbdDBjREiCnK2q8qk_5hPcEKn47JMrv_LYpNTw/exec" method="POST" target="hidden_iframe" style="display:none;">
       <input type="hidden" name="email" id="formEmail">
       <input type="hidden" name="cart" id="formCart">
     </form>
@@ -298,146 +298,87 @@
 </footer>
 
 <script>
-const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxbPTVtBYemEoYXqp2Xc-2khnaBhHk7grtNxy3f18R_FYacugwT2smw8T8mVJhhkbgOpg/exec";
-
+const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxDDYgwS08N-mLp2g5YJG2VWAMeN5SNtbdDBjREiCnK2q8qk_5hPcEKn47JMrv_LYpNTw/exec";
+let orderId = Date.now().toString(); // Unieke ID per sessie
 let cart = [];
-let orderId = Date.now(); // Uniek ID voor deze bestelling
 
-// Modal referenties
-const productModal = document.getElementById('productModal');
-const modalImage = document.getElementById('modalImage');
-const modalName = document.getElementById('modalName');
-const modalPrice = document.getElementById('modalPrice');
-const addToCartBtn = document.getElementById('addToCart');
-
-// Klik op hero item → toon modal
-document.querySelectorAll('.hero-item').forEach(item => {
-    item.addEventListener('click', () => {
-        const name = item.dataset.name;
-        const price = item.dataset.price;
-        const image = item.dataset.image;
-
-        if (name && price && image) {
-            modalImage.src = image;
-            modalName.textContent = name;
-            modalPrice.textContent = price;
-            productModal.style.display = 'flex';
-        }
-    });
-});
-
-// Sluit modal
-document.getElementById('closeProductModal').addEventListener('click', () => productModal.style.display = 'none');
-window.addEventListener('click', (e) => {
-    if (e.target === productModal) productModal.style.display = 'none';
-});
-
-// Voeg toe aan winkelmandje (vanuit modal)
-addToCartBtn.addEventListener('click', (e) => {
-    e.preventDefault();
-    const item = { name: modalName.textContent, price: modalPrice.textContent };
-    cart.push(item);
-    updateCartCount();
-    productModal.style.display = 'none';
-});
-
-// Voeg toe vanuit menu
-document.querySelectorAll('.menu-item .btn-order').forEach(btn => {
-    btn.addEventListener('click', (e) => {
-        e.preventDefault();
-        const parent = btn.closest('.menu-item');
-        const name = parent.querySelector('h3').textContent;
-        const price = parent.querySelector('p').textContent;
-        const item = { name, price };
-        cart.push(item);
-        updateCartCount();
-    });
-});
-
-function updateCartCount() {
-    document.getElementById('cartCount').textContent = cart.length;
+// ✅ Product toevoegen aan winkelmand (blijft bestaan voor UI)
+function addToCart(name, price) {
+    cart.push({ name, price });
+    updateCartUI();
 }
 
-// Winkelmand tonen
-document.getElementById('cartButton').addEventListener('click', (e) => {
-    e.preventDefault();
-    showCartPopup();
-});
-
-function showCartPopup() {
-    let html = "<h3>Je winkelmandje</h3><ul style='text-align:left;'>";
+// ✅ UI update (niet gelogd)
+function updateCartUI() {
+    const cartContainer = document.getElementById('cartItems');
+    cartContainer.innerHTML = '';
     cart.forEach(item => {
-        html += `<li>${item.name} - ${item.price}</li>`;
-    });
-    html += "</ul><button id='orderNow' style='margin-top:15px; padding:12px 20px; background:#FFD700; color:#000; font-weight:bold; border:none; border-radius:8px;'>Bestel nu</button>";
-
-    const div = document.createElement('div');
-    div.className = 'modal';
-    div.style.display = 'flex';
-    div.innerHTML = `<div class="modal-content"><span class="close-btn">&times;</span>${html}</div>`;
-    document.body.appendChild(div);
-
-    div.querySelector('.close-btn').addEventListener('click', () => div.remove());
-    div.querySelector('#orderNow').addEventListener('click', () => {
-        div.remove();
-        
-        // ✅ Log volledige bestelling in één keer (zonder e-mail)
-        logOrder({ email: "", update: "NEE" });
-
-        // Toon update-popup
-        document.getElementById('updateModal').style.display = 'flex';
+        const div = document.createElement('div');
+        div.textContent = `${item.name} - €${item.price}`;
+        cartContainer.appendChild(div);
     });
 }
 
-// Sluit update-popup
-document.getElementById('closeUpdateModal').addEventListener('click', () => {
-    document.getElementById('updateModal').style.display = 'none';
-});
-
-// Stuur e-mail via fetch
-document.getElementById('sendUpdate').addEventListener('click', () => {
-    const email = document.getElementById('customerEmail').value.trim();
-    if(!email) {
-        document.getElementById('updateStatus').textContent = "Vul een geldig e-mailadres in.";
-        return;
-    }
-
-    // ✅ Werk bestaande bestelling bij met e-mail
-   logEmailUpdate(email);
-
-    // Feedback aan gebruiker
-    document.getElementById('updateStatus').textContent = "Bedankt! Je ontvangt binnenkort een update.";
-    document.getElementById('customerEmail').value = "";
-    cart = [];
-    updateCartCount();
-});
-
-// ✅ Functie om volledige bestelling te loggen (één keer)
-function logOrder({ email, update }) {
+// ✅ Logging van ÉÉN product direct bij klik
+function logOrderSingleProduct(name, price) {
     const formData = new FormData();
     formData.append("orderId", orderId);
-    formData.append("email", email);
-    formData.append("cart", JSON.stringify(cart));
-    formData.append("update", update);
+    formData.append("email", ""); // nog geen email
+    formData.append("cart", JSON.stringify([{ name, price }])); // enkel dit product
+    formData.append("update", "NEE");
     formData.append("timestamp", new Date().toISOString());
 
     fetch(GOOGLE_SCRIPT_URL, { method: "POST", body: formData })
-        .then(() => console.log("Bestelling gelogd:", { email, cart }))
-        .catch(err => console.error("Fout bij loggen:", err));
+        .then(() => console.log("✅ Product gelogd:", name))
+        .catch(err => console.error("❌ Fout bij loggen product:", err));
 }
-   function logEmailUpdate(email) {
+
+// ✅ Alleen email-update loggen (geen producten)
+function logEmailUpdate(email) {
     const formData = new FormData();
     formData.append("orderId", orderId);
     formData.append("email", email);
     formData.append("update", "JA");
+    formData.append("timestamp", new Date().toISOString());
 
     fetch(GOOGLE_SCRIPT_URL, { method: "POST", body: formData })
-        .then(() => console.log("Email update gelogd:", email))
-        .catch(err => console.error("Fout bij loggen email:", err));
+        .then(() => console.log("✅ Email update gelogd:", email))
+        .catch(err => console.error("❌ Fout bij loggen email:", err));
 }
+
+// ✅ Event: Klik op “Bestel” in productmodal
+document.querySelectorAll('.bestel-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+        const name = btn.getAttribute('data-name');
+        const price = btn.getAttribute('data-price');
+
+        addToCart(name, price);
+        logOrderSingleProduct(name, price); // LOG HIER
+
+        // Sluit modal als je een modal gebruikt
+        const modal = btn.closest('.modal');
+        if (modal) modal.style.display = 'none';
+    });
+});
+
+// ✅ Event: Klik op “Bestel nu” in winkelmandje
+document.querySelector('#orderNow').addEventListener('click', () => {
+    document.getElementById('updateModal').style.display = 'flex';
+});
+
+// ✅ Event: Stuur me een update (email invoeren)
+document.querySelector('#sendUpdate').addEventListener('click', () => {
+    const email = document.querySelector('#emailInput').value.trim();
+    if (email) {
+        logEmailUpdate(email);
+        alert('Bedankt! Je ontvangt binnenkort een update.');
+    }
+    document.getElementById('updateModal').style.display = 'none';
+});
 </script>
 </body>
 </html>
+
 
 
 
