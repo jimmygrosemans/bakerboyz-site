@@ -301,6 +301,7 @@
 const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbx6D7oOgE_mkytOTAeGIP99xIAc5m41JEML7hX-IkcMgYFuH-zOoeNRPK1ygdAAs__Cuw/exec";
 
 let cart = [];
+let orderId = Date.now(); // Uniek ID voor deze bestelling
 
 // Modal referenties
 const productModal = document.getElementById('productModal');
@@ -337,10 +338,6 @@ addToCartBtn.addEventListener('click', (e) => {
     const item = { name: modalName.textContent, price: modalPrice.textContent };
     cart.push(item);
     updateCartCount();
-
-    // ✅ Log deze bestelling direct in Google Sheet
-    logOrderToSheet(item.name + " - " + item.price);
-
     productModal.style.display = 'none';
 });
 
@@ -354,27 +351,11 @@ document.querySelectorAll('.menu-item .btn-order').forEach(btn => {
         const item = { name, price };
         cart.push(item);
         updateCartCount();
-
-        // ✅ Log ook deze bestelling direct in Google Sheet
-        logOrderToSheet(item.name + " - " + item.price);
     });
 });
 
 function updateCartCount() {
     document.getElementById('cartCount').textContent = cart.length;
-}
-
-// ✅ Functie om bestelling direct te loggen in Google Sheet
-function logOrderToSheet(orderText) {
-    const formData = new FormData();
-    formData.append("email", ""); // Nog geen e-mail
-    formData.append("cart", orderText);
-    formData.append("update", "NEE");
-    formData.append("timestamp", new Date().toLocaleString('nl-NL'));
-
-    fetch(GOOGLE_SCRIPT_URL, { method: "POST", body: formData })
-        .then(res => console.log("Order logged:", orderText))
-        .catch(err => console.error("Fout bij loggen:", err));
 }
 
 // Winkelmand tonen
@@ -398,18 +379,14 @@ function showCartPopup() {
 
     div.querySelector('.close-btn').addEventListener('click', () => div.remove());
     div.querySelector('#orderNow').addEventListener('click', () => {
-    div.remove();
-    // ✅ Direct bestelling loggen (zonder e-mail)
-    fetch(GOOGLE_SCRIPT_URL, {
-        method: 'POST',
-        body: new URLSearchParams({
-            email: '', // nog niet bekend
-            cart: JSON.stringify(cart)
-        })
-    });
+        div.remove();
+        
+        // ✅ Log volledige bestelling in één keer (zonder e-mail)
+        logOrder({ email: "", update: "NEE" });
 
-    document.getElementById('updateModal').style.display = 'flex';
-});
+        // Toon update-popup
+        document.getElementById('updateModal').style.display = 'flex';
+    });
 }
 
 // Sluit update-popup
@@ -417,7 +394,7 @@ document.getElementById('closeUpdateModal').addEventListener('click', () => {
     document.getElementById('updateModal').style.display = 'none';
 });
 
-// Stuur e-mail via verborgen form (CORS-proof)
+// Stuur e-mail via fetch
 document.getElementById('sendUpdate').addEventListener('click', () => {
     const email = document.getElementById('customerEmail').value.trim();
     if(!email) {
@@ -425,20 +402,8 @@ document.getElementById('sendUpdate').addEventListener('click', () => {
         return;
     }
 
-    // Vul verborgen form in
-    document.getElementById('formEmail').value = email;
-    document.getElementById('formCart').value = JSON.stringify(cart);
-
-    // ✅ Log alle items nogmaals maar nu met e-mail & update = JA
-    const formData = new FormData();
-    formData.append("email", email);
-    formData.append("cart", JSON.stringify(cart));
-    formData.append("update", "JA");
-    formData.append("timestamp", new Date().toLocaleString('nl-NL'));
-
-    fetch(GOOGLE_SCRIPT_URL, { method: "POST", body: formData })
-        .then(() => console.log("Update + email verstuurd"))
-        .catch(err => console.error("Fout bij verzenden:", err));
+    // ✅ Werk bestaande bestelling bij met e-mail
+    logOrder({ email: email, update: "JA" });
 
     // Feedback aan gebruiker
     document.getElementById('updateStatus').textContent = "Bedankt! Je ontvangt binnenkort een update.";
@@ -446,9 +411,24 @@ document.getElementById('sendUpdate').addEventListener('click', () => {
     cart = [];
     updateCartCount();
 });
+
+// ✅ Functie om volledige bestelling te loggen (één keer)
+function logOrder({ email, update }) {
+    const formData = new FormData();
+    formData.append("orderId", orderId);
+    formData.append("email", email);
+    formData.append("cart", JSON.stringify(cart));
+    formData.append("update", update);
+    formData.append("timestamp", new Date().toISOString());
+
+    fetch(GOOGLE_SCRIPT_URL, { method: "POST", body: formData })
+        .then(() => console.log("Bestelling gelogd:", { email, cart }))
+        .catch(err => console.error("Fout bij loggen:", err));
+}
 </script>
 </body>
 </html>
+
 
 
 
